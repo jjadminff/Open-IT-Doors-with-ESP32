@@ -1,20 +1,19 @@
-🌐 Open IT Doors con ESP32
+# 🌐 Open IT Doors con ESP32
 
 Este proyecto permite controlar dos puertas usando ESP32 y visualizar las cámaras asociadas, todo desde un Dashboard Web.
 Cada ESP32 obtiene su propia IP local, la cual se integra en el panel principal para manejar relés de manera remota.
 
-⚙️ Requisitos
-Hardware
+---
 
-2 × ESP32
+## ⚙️ Requisitos
 
-2 × Módulos Relay
+### Hardware
+- 2 × ESP32
+- 2 × Módulos Relay
+- Cables USB tipo C
+- Fuentes de poder de 5V (o puertos USB de PC)
 
-Cables USB tipo C
-
-Fuentes de poder de 5V (o puertos USB de PC)
-
-Cámaras IP para monitoreo de puertas
+## Cámaras IP para monitoreo de puertas
 
 Software
 

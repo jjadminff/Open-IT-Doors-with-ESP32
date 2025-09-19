@@ -27,7 +27,7 @@ Controla dos puertas usando ESP32, donde cada placa controla su propio relé y a
 
 ---
 
- 🚀 Cómo Funciona
+### 🚀 Cómo Funciona
 
 1- ESP32 #1 → Hospeda la página web principal y controla Relay 1
 

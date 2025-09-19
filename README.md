@@ -13,7 +13,9 @@ Controla dos puertas usando ESP32, donde cada placa controla su propio relé y a
 - Fuentes de poder de 5V (o puertos USB de PC)
 
 ### Software
-- [Arduino IDE](https://www.arduino.cc/en/software)  
+- [Arduino IDE](https://www.arduino.cc/en/software)
+
+  ---
 
  ⚙️ Características
 

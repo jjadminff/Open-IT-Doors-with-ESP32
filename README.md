@@ -6,6 +6,15 @@ Controla dos puertas usando ESP32, donde cada placa controla su propio relé y a
 
 ---
 
+### Hardware
+- 2 × ESP32  
+- 2 × Módulos Relay  
+- Cables USB tipo C  
+- Fuentes de poder de 5V (o puertos USB de PC)
+
+### Software
+- [Arduino IDE](https://www.arduino.cc/en/software)  
+
  ⚙️ Características
 
 - Usa dos placas ESP32

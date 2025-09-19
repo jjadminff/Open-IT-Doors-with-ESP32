@@ -1,105 +1,74 @@
-# 🌐 Open IT Doors con ESP32
+🌐 Open IT Doors with ESP32
 
-Este proyecto permite controlar dos puertas usando ESP32 y visualizar las cámaras asociadas, todo desde un Dashboard Web.
-Cada ESP32 obtiene su propia IP local, la cual se integra en el panel principal para manejar relés de manera remota.
+Controla dos puertas usando ESP32, donde cada placa controla su propio relé y ambos aparecen en la misma página web.
 
----
+⚙️ Características
 
-## ⚙️ Requisitos
+Usa dos placas ESP32.
 
-### Hardware
-- 2 × ESP32
-- 2 × Módulos Relay
-- Cables USB tipo C
-- Fuentes de poder de 5V (o puertos USB de PC)
+Cada ESP32 controla su propio relé.
 
-## Cámaras IP para monitoreo de puertas
+Ambas se visualizan en la misma página web.
 
-Software
+🚀 Cómo Funciona
 
-Arduino IDE
+ESP32 #1 → Hospeda la página web principal y controla Relay 1.
 
-Librerías necesarias:
+ESP32 #2 → Expone un endpoint simple (por ejemplo /pulse) para activar Relay 2.
 
-WiFi.h
+La página web principal de ESP32 #1 envía solicitudes a ambos ESP32, mostrando ambos relés y cámaras en un solo lugar.
 
-WebServer.h
+🔌 ESP32 #2 (Relay Only)
 
-HTTPClient.h
+Flashea este código en el segundo ESP32.
 
-🚀 Instalación y Configuración
+Es un servidor pequeño que únicamente controla su relé.
 
-ESP32 #1 – Dashboard Principal
+Nota:
 
-Flashea el ESP32 con el código ESP32 Main + Relay 1 + Cámaras.
+Toma nota de la IP que imprime en el Serial Monitor (ejemplo: 192.168.3.84).
 
-Abre el Serial Monitor y guarda la IP asignada (la usarás en tu navegador).
+Esta IP será necesaria para el ESP32 principal.
 
-ESP32 #2 – Relay Secundario
+Para producción, se recomienda reservar esta IP en el DHCP para que sea permanente.
 
-Flashea el ESP32 con el código ESP32 Relay 2.
+💻 ESP32 #1 (Main Web Page + Relay 1 + Cámaras + Llama a ESP32 #2)
 
-Guarda la IP generada.
+Flashea este código en el ESP32 principal.
 
-Configura el Dashboard
+Esta placa maneja Relay 1, muestra ambas cámaras y envía solicitudes al ESP32 #2 para Relay 2.
 
-Abre el código del ESP32 principal.
+📷 Cámaras
 
-Añade la IP del ESP32 secundario en la variable esp32Relay2:
+Las variables cameraURL1 y cameraURL2 corresponden a los feeds de las cámaras de las puertas.
 
-const char* esp32Relay2 = "192.168.3.84"; // IP del ESP32 #2
+Los feeds son proporcionados por el servidor de cámaras ZoneMinder:
 
+Servidor: 192.168.3.241 (IOT.sport.local)
 
-Configura los pines GPIO
+App: http://iot/zm/index.php
 
-Por defecto, Relay 1 → GPIO 2 y Relay 2 → GPIO 26.
+Asegúrate de que las cámaras sean accesibles desde la misma red que los ESP32.
 
-Cambia los pines si lo deseas según tu montaje.
+📝 Notas Importantes
 
-🔌 Cableado
-ESP32 Pin	Relay Pin
-GPIO 2	IN (Relay 1)
-GPIO 26	IN (Relay 2)
-5V	VCC
-GND	GND
+Todos los ESP32 deben estar conectados a la misma red WiFi (FFNET).
 
-📎 Archivo adjunto: ESP32 & Relay Wiring Diagram
+Reserva IPs en el DHCP para producción y evitar cambios de IP.
 
-🖥️ Uso
+Cada relé tiene un pin específico por defecto:
+
+Relay 1: GPIO 2
+
+Relay 2: GPIO 26
+
+💡 Sugerencias de Uso
 
 Conecta los ESP32 a la PC o a fuentes de poder de 5V mediante USB tipo C.
 
 Abre la IP del Dashboard en tu navegador.
 
-Controla los relés desde la interfaz web y visualiza las cámaras de las puertas en tiempo real.
-
-📸 Ejemplo de Interfaz
-
-(Aquí puedes agregar capturas del Dashboard y del montaje físico)
-
-Diseño Web:
-
-Dos columnas: puerta principal (Relay 1 + Cámara 1) y cocina (Relay 2 + Cámara 2).
-
-Botones “Click to Open” para cada puerta.
-
-Auto-refresh de cámaras cada segundo.
-
-🔄 Flujo de Control
-flowchart LR
-    A[Usuario abre Dashboard ESP32 #1] --> B{Elige puerta}
-    B -->|Relay 1| C[ESP32 #1 activa Relay 1]
-    B -->|Relay 2| D[ESP32 #1 envía HTTP a ESP32 #2]
-    D --> E[ESP32 #2 activa Relay 2]
-    C & E --> F[Cámara actualizada en la web]
-
-📝 Notas
-
-Todos los ESP32 se alimentan con USB tipo C y fuentes de 5V.
-
-Asegúrate de reservar las IPs en DHCP para producción y evitar cambios de IP.
-
-Las cámaras IP deben estar accesibles desde la misma red.
+Controla los relés desde la interfaz web y visualiza las cámaras en tiempo real.
 
 📄 Licencia
 

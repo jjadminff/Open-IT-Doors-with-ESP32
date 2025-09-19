@@ -4,6 +4,8 @@
 
 Controla dos puertas usando ESP32, donde cada placa controla su propio relé y ambos aparecen en la misma página web.
 
+---
+
  ⚙️ Características
 
 - Usa dos placas ESP32

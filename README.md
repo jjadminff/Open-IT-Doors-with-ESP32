@@ -24,7 +24,7 @@ Controla dos puertas usando ESP32, donde cada placa controla su propio relé y a
 
 ---
 
-###🔌 ESP32 #2 (Relay Only)
+🔌 ESP32 #2 (Relay Only)
 
 - Flashea este código en el segundo ESP32
 
@@ -40,7 +40,7 @@ Nota:
 
 ---
 
-### 💻 ESP32 #1 (Main Web Page + Relay 1 + Cámaras + Llama a ESP32 #2)
+ 💻 ESP32 #1 (Main Web Page + Relay 1 + Cámaras + Llama a ESP32 #2)
 
 - Flashea este código en el ESP32 principal
 
@@ -48,7 +48,7 @@ Nota:
 
 ---
 
-### 📷 Cámaras
+ 📷 Cámaras
 
 - Las variables cameraURL1 y cameraURL2 corresponden a los feeds de las cámaras de las puertas
 
@@ -62,7 +62,7 @@ Nota:
 
 ---
 
-### 📝 Notas Importantes
+ 📝 Notas Importantes
 
 - Todos los ESP32 deben estar conectados a la misma red WiFi (FFNET)
 
@@ -76,7 +76,7 @@ Nota:
 
 ---
 
-###💡 Sugerencias de Uso
+💡 Sugerencias de Uso
 
 1 - Conecta los ESP32 a la PC o a fuentes de poder de 5V mediante USB tipo C
 
@@ -86,4 +86,6 @@ Nota:
 
 ---
 
-###📄 Licencia
+📄 Licencia
+
+Este proyecto es de uso libre para fines educativos y experimentales

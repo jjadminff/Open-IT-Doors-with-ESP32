@@ -1,0 +1,105 @@
+#include <WiFi.h>
+#include <WebServer.h>
+#include <HTTPClient.h>
+
+const char* ssid = "FFNET";
+const char* password = "W4tchTh3G4M3*";
+
+WebServer server(80);
+
+// Relay pin
+#define RELAY_PIN 2
+
+// IP camera snapshot URLs
+const char* cameraURL1 = "http://192.168.3.241/cgi-bin/nph-zms?mode=jpeg&monitor=1&scale=100&maxfps=10&buffer=1000&user=92PrVjLB6X3Ljt88&pass=y5Id38czsufoQ7Ma";
+const char* cameraURL2 = "http://192.168.3.241/cgi-bin/nph-zms?mode=jpeg&monitor=27&scale=100&maxfps=10&buffer=1000&user=92PrVjLB6X3Ljt88&pass=y5Id38czsufoQ7Ma";
+
+// URL del segundo ESP32
+const char* esp32Relay2 = "http://192.168.3.42/pulse";
+
+void handleRoot() {
+  String html = "<html><head><style>";
+  html += "body { background-color: black; color: white; font-family: Arial; text-align: center; }";
+  html += "h1 { color: #00ffcc; }";
+  html += ".grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; justify-items: center; align-items: center; }";
+  html += "button { background-color: #00ffcc; border: none; color: black; padding: 15px 30px; font-size: 20px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: 0.3s; margin-top: 10px; }";
+  html += "button:hover { background-color: #00cca3; box-shadow: 0 6px 10px rgba(0,0,0,0.5); }";
+  html += "img { border:4px solid #00ffcc; border-radius:12px; max-width: 100%; height: auto; }";
+  html += "</style></head><body>";
+  html += "<h1>IT Doors</h1>";
+  html += "<div class='grid'>";
+
+  // Cámara + Relay 1 (local)
+  html += "<div>";
+  html += "<h2>IT Main</h2>";
+  html += "<img id='cam1' src='" + String(cameraURL1) + "' width='720'><br>";
+  html += "<a href='/pulse1'><button>Click to Open</button></a>";
+  html += "</div>";
+
+  // Cámara + Relay 2 (remoto)
+  html += "<div>";
+  html += "<h2>IT Kitchen</h2>";
+  html += "<img id='cam2' src='" + String(cameraURL2) + "' width='720'><br>";
+  html += "<a href='/pulse2'><button>Click to Open</button></a>";
+  html += "</div>";
+
+  html += "</div>"; // grid
+
+  // Script para refrescar cámaras
+  html += "<script>";
+  html += "setInterval(()=>{document.getElementById('cam1').src='" + String(cameraURL1) + "&rs=' + new Date().getTime();},1000);";
+  html += "setInterval(()=>{document.getElementById('cam2').src='" + String(cameraURL2) + "&rs=' + new Date().getTime();},1000);";
+  html += "</script>";
+
+  html += "</body></html>";
+
+  server.send(200, "text/html", html);
+}
+
+void handlePulse1() { // Relay local
+  digitalWrite(RELAY_PIN, HIGH);
+  delay(2000);
+  digitalWrite(RELAY_PIN, LOW);
+
+  // Redirigir a la página principal
+  server.sendHeader("Location", "/");
+  server.send(303); // "See Other"
+}
+
+void handlePulse2() { // Relay remoto
+  HTTPClient http;
+  http.begin(esp32Relay2);
+  int httpCode = http.GET();
+  http.end();
+
+  // Redirigir a la página principal
+  server.sendHeader("Location", "/");
+  server.send(303);
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW);
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nWiFi connected! IP: " + WiFi.localIP().toString());
+
+  // Rutas
+  server.on("/", handleRoot);
+  server.on("/pulse1", handlePulse1);
+  server.on("/pulse2", handlePulse2);
+
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+}
